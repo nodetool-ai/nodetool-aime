@@ -1,0 +1,758 @@
+{
+  "name": "nodetool-aime",
+  "description": "Nodetool AIME nodes",
+  "version": "0.6.0",
+  "authors": [
+    "Matthias Georgi <matti.georgi@gmail.com>"
+  ],
+  "repo_id": "",
+  "nodes": [
+    {
+      "title": "Seamless Communication",
+      "description": "Translates text from one language to another using the AIME API.",
+      "namespace": "aime.translate",
+      "node_type": "aime.translate.SeamlessCommunication",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "src_lang",
+          "type": {
+            "type": "enum",
+            "values": [
+              "arb",
+              "ben",
+              "cat",
+              "ces",
+              "cmn",
+              "cym",
+              "dan",
+              "deu",
+              "eng",
+              "est",
+              "fin",
+              "fra",
+              "hin",
+              "ind",
+              "ita",
+              "jpn",
+              "kor",
+              "mlt",
+              "nld",
+              "pes",
+              "pol",
+              "por",
+              "ron",
+              "rus",
+              "slk",
+              "spa",
+              "swe",
+              "swh",
+              "tam",
+              "tel",
+              "tgl",
+              "tha",
+              "tur",
+              "ukr",
+              "urd",
+              "uzn",
+              "vie"
+            ],
+            "type_name": "nodetool.nodes.aime.translate.Language"
+          },
+          "default": "deu",
+          "title": "Source Language"
+        },
+        {
+          "name": "tgt_lang",
+          "type": {
+            "type": "enum",
+            "values": [
+              "arb",
+              "ben",
+              "cat",
+              "ces",
+              "cmn",
+              "cym",
+              "dan",
+              "deu",
+              "eng",
+              "est",
+              "fin",
+              "fra",
+              "hin",
+              "ind",
+              "ita",
+              "jpn",
+              "kor",
+              "mlt",
+              "nld",
+              "pes",
+              "pol",
+              "por",
+              "ron",
+              "rus",
+              "slk",
+              "spa",
+              "swe",
+              "swh",
+              "tam",
+              "tel",
+              "tgl",
+              "tha",
+              "tur",
+              "ukr",
+              "urd",
+              "uzn",
+              "vie"
+            ],
+            "type_name": "nodetool.nodes.aime.translate.Language"
+          },
+          "default": "eng",
+          "title": "Target Language"
+        },
+        {
+          "name": "generate_audio",
+          "type": {
+            "type": "bool"
+          },
+          "default": true,
+          "title": "Generate Audio"
+        },
+        {
+          "name": "text_input",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Text to Translate"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "str"
+          },
+          "name": "text"
+        },
+        {
+          "type": {
+            "type": "audio"
+          },
+          "name": "audio"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "src_lang",
+        "tgt_lang",
+        "generate_audio",
+        "text_input"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Base Chat",
+      "description": "Base class for AIME chat nodes with common fields",
+      "namespace": "aime.text",
+      "node_type": "aime.text.BaseChat",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "system_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "You are a friendly assistant.",
+          "title": "System Prompt",
+          "description": "System prompt that defines the assistant's behavior."
+        },
+        {
+          "name": "messages",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "message"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Messages",
+          "description": "History of messages in the conversation."
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Prompt to send to the model. If provided, it will add a new message to the conversation."
+        },
+        {
+          "name": "temperature",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.8,
+          "title": "Temperature",
+          "description": "The temperature to use for response generation.",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "name": "top_k",
+          "type": {
+            "type": "int"
+          },
+          "default": 40,
+          "title": "Top K",
+          "description": "The number of highest probability tokens to consider.",
+          "min": 1.0
+        },
+        {
+          "name": "top_p",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.9,
+          "title": "Top P",
+          "description": "The cumulative probability threshold for token sampling.",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "name": "max_tokens",
+          "type": {
+            "type": "int"
+          },
+          "default": 500,
+          "title": "Max Tokens",
+          "description": "Maximum number of tokens to generate.",
+          "min": 1.0
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "any"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "messages",
+        "prompt",
+        "max_tokens"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Llama 3 Chat",
+      "description": "Run chat models using the Aime API with Llama 3.1.\n    llm, text generation, language model, ai assistant\n\n    Use cases:\n    - Chat with an AI assistant using Llama 3.1\n    - Generate responses for conversational workflows\n    - Integrate with chat-based applications",
+      "namespace": "aime.text",
+      "node_type": "aime.text.Llama3Chat",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "system_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "You are a friendly assistant.",
+          "title": "System Prompt",
+          "description": "System prompt that defines the assistant's behavior."
+        },
+        {
+          "name": "messages",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "message"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Messages",
+          "description": "History of messages in the conversation."
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Prompt to send to the model. If provided, it will add a new message to the conversation."
+        },
+        {
+          "name": "temperature",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.8,
+          "title": "Temperature",
+          "description": "The temperature to use for response generation.",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "name": "top_k",
+          "type": {
+            "type": "int"
+          },
+          "default": 40,
+          "title": "Top K",
+          "description": "The number of highest probability tokens to consider.",
+          "min": 1.0
+        },
+        {
+          "name": "top_p",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.9,
+          "title": "Top P",
+          "description": "The cumulative probability threshold for token sampling.",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "name": "max_tokens",
+          "type": {
+            "type": "int"
+          },
+          "default": 500,
+          "title": "Max Tokens",
+          "description": "Maximum number of tokens to generate.",
+          "min": 1.0
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "str"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "messages",
+        "prompt",
+        "max_tokens"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Mixtral Chat",
+      "description": "Run chat models using the Aime API with Mixtral.\n    llm, text generation, language model, ai assistant\n\n    Use cases:\n    - Chat with an AI assistant using Mixtral\n    - Generate responses for conversational workflows\n    - Integrate with chat-based applications",
+      "namespace": "aime.text",
+      "node_type": "aime.text.MixtralChat",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "system_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "You are a friendly assistant.",
+          "title": "System Prompt",
+          "description": "System prompt that defines the assistant's behavior."
+        },
+        {
+          "name": "messages",
+          "type": {
+            "type": "list",
+            "type_args": [
+              {
+                "type": "message"
+              }
+            ]
+          },
+          "default": [],
+          "title": "Messages",
+          "description": "History of messages in the conversation."
+        },
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "Prompt to send to the model. If provided, it will add a new message to the conversation."
+        },
+        {
+          "name": "temperature",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.8,
+          "title": "Temperature",
+          "description": "The temperature to use for response generation.",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "name": "top_k",
+          "type": {
+            "type": "int"
+          },
+          "default": 40,
+          "title": "Top K",
+          "description": "The number of highest probability tokens to consider.",
+          "min": 1.0
+        },
+        {
+          "name": "top_p",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.9,
+          "title": "Top P",
+          "description": "The cumulative probability threshold for token sampling.",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "name": "max_tokens",
+          "type": {
+            "type": "int"
+          },
+          "default": 500,
+          "title": "Max Tokens",
+          "description": "Maximum number of tokens to generate.",
+          "min": 1.0
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "str"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "messages",
+        "prompt",
+        "max_tokens"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Tortoise TTS",
+      "description": "Generate high-quality speech from text using the Tortoise TTS API. Features multiple voices and quality presets.\n    audio, tts, speech, synthesis, voice\n\n    Use cases:\n    - Generate natural-sounding speech\n    - Create voiceovers\n    - Produce multilingual audio\n    - Create character voices",
+      "namespace": "aime.audio",
+      "node_type": "aime.audio.TortoiseTTS",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "voice",
+          "type": {
+            "type": "enum",
+            "values": [
+              "train_grace",
+              "train_daws",
+              "angie",
+              "emma",
+              "freeman",
+              "jlaw",
+              "deniro",
+              "train_atkins",
+              "train_dreams",
+              "train_empire",
+              "train_kennard",
+              "train_lescault",
+              "train_mouse"
+            ],
+            "type_name": "nodetool.nodes.aime.audio.VoiceType"
+          },
+          "default": "train_grace",
+          "title": "Voice"
+        },
+        {
+          "name": "preset",
+          "type": {
+            "type": "enum",
+            "values": [
+              "ultra_fast",
+              "fast",
+              "standard",
+              "high_quality"
+            ],
+            "type_name": "nodetool.nodes.aime.audio.PresetType"
+          },
+          "default": "standard",
+          "title": "Preset"
+        },
+        {
+          "name": "text_input",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Text to Translate"
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "audio"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "text_input"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Flux",
+      "description": "Generate images using Flux through the Aime API.\n    image generation, ai art, flux\n\n    Use cases:\n    - Generate high-quality images from text descriptions\n    - Create artistic variations of prompts\n    - Produce realistic or stylized imagery",
+      "namespace": "aime.image",
+      "node_type": "aime.image.Flux",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The text prompt describing the desired image."
+        },
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "An image to use as a starting point for generation."
+        },
+        {
+          "name": "height",
+          "type": {
+            "type": "int"
+          },
+          "default": 1024,
+          "title": "Height",
+          "description": "Height of the generated image.",
+          "min": 64.0,
+          "max": 2048.0
+        },
+        {
+          "name": "width",
+          "type": {
+            "type": "int"
+          },
+          "default": 1024,
+          "title": "Width",
+          "description": "Width of the generated image.",
+          "min": 64.0,
+          "max": 2048.0
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "Random seed for generation. Use -1 for random seed."
+        },
+        {
+          "name": "steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 50,
+          "title": "Steps",
+          "description": "Number of denoising steps.",
+          "min": 1.0,
+          "max": 100.0
+        },
+        {
+          "name": "guidance",
+          "type": {
+            "type": "float"
+          },
+          "default": 3.5,
+          "title": "Guidance",
+          "description": "Guidance scale for generation.",
+          "min": 1.0,
+          "max": 20.0
+        },
+        {
+          "name": "image2image_strength",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.8,
+          "title": "Image2Image Strength",
+          "description": "Strength of image-to-image transformation.",
+          "min": 0.0,
+          "max": 1.0
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "prompt",
+        "image",
+        "height",
+        "width"
+      ],
+      "is_dynamic": false
+    },
+    {
+      "title": "Stable Diffusion 3",
+      "description": "Generate images using Stable Diffusion 3 through the Aime API.\n    image generation, ai art, stable diffusion\n\n    Use cases:\n    - Generate high-quality images from text descriptions\n    - Create artistic variations of prompts\n    - Produce realistic or stylized imagery",
+      "namespace": "aime.image",
+      "node_type": "aime.image.StableDiffusion3",
+      "layout": "default",
+      "properties": [
+        {
+          "name": "prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "",
+          "title": "Prompt",
+          "description": "The text prompt describing the desired image."
+        },
+        {
+          "name": "negative_prompt",
+          "type": {
+            "type": "str"
+          },
+          "default": "out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers",
+          "title": "Negative Prompt",
+          "description": "Text prompt describing elements to avoid in the image."
+        },
+        {
+          "name": "image",
+          "type": {
+            "type": "image"
+          },
+          "default": {},
+          "title": "Image",
+          "description": "An image to use as a starting point for generation."
+        },
+        {
+          "name": "height",
+          "type": {
+            "type": "int"
+          },
+          "default": 1024,
+          "title": "Height",
+          "description": "Height of the generated image.",
+          "min": 64.0,
+          "max": 2048.0
+        },
+        {
+          "name": "width",
+          "type": {
+            "type": "int"
+          },
+          "default": 1024,
+          "title": "Width",
+          "description": "Width of the generated image.",
+          "min": 64.0,
+          "max": 2048.0
+        },
+        {
+          "name": "seed",
+          "type": {
+            "type": "int"
+          },
+          "default": -1,
+          "title": "Seed",
+          "description": "Random seed for generation. Use -1 for random seed."
+        },
+        {
+          "name": "num_samples",
+          "type": {
+            "type": "int"
+          },
+          "default": 1,
+          "title": "Num Samples",
+          "description": "Number of images to generate.",
+          "min": 1.0,
+          "max": 4.0
+        },
+        {
+          "name": "steps",
+          "type": {
+            "type": "int"
+          },
+          "default": 30,
+          "title": "Steps",
+          "description": "Number of denoising steps.",
+          "min": 1.0,
+          "max": 100.0
+        },
+        {
+          "name": "cfg_scale",
+          "type": {
+            "type": "float"
+          },
+          "default": 5.0,
+          "title": "Cfg Scale",
+          "description": "Classifier free guidance scale.",
+          "min": 1.0,
+          "max": 20.0
+        },
+        {
+          "name": "denoise",
+          "type": {
+            "type": "float"
+          },
+          "default": 0.6,
+          "title": "Denoise",
+          "description": "Denoising strength.",
+          "min": 0.0,
+          "max": 1.0
+        }
+      ],
+      "outputs": [
+        {
+          "type": {
+            "type": "image"
+          },
+          "name": "output"
+        }
+      ],
+      "the_model_info": {},
+      "recommended_models": [],
+      "basic_fields": [
+        "prompt",
+        "height",
+        "width",
+        "seed"
+      ],
+      "is_dynamic": false
+    }
+  ]
+}

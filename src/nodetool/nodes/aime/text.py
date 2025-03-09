@@ -2,6 +2,8 @@ from enum import Enum
 import json
 from pydantic import Field
 from nodetool.metadata.types import Message, Provider
+
+from nodetool.nodes.aime.prediction import run_aime
 from .types import Progress
 from nodetool.workflows.base_node import BaseNode
 from nodetool.workflows.processing_context import ProcessingContext
@@ -87,6 +89,7 @@ class BaseChatNode(BaseNode):
         response = await context.run_prediction(
             node_id=self._id,
             provider=Provider.AIME,
+            run_prediction_function=run_aime,
             model=model,
             params={
                 "data": payload,

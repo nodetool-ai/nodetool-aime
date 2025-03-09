@@ -3,6 +3,8 @@ from nodetool.metadata.types import ImageRef, Provider
 from nodetool.workflows.base_node import BaseNode
 from nodetool.workflows.processing_context import ProcessingContext
 from nodetool.workflows.types import NodeProgress
+
+from nodetool.nodes.aime.prediction import run_aime
 from .types import Progress
 
 
@@ -109,6 +111,7 @@ class StableDiffusion3(BaseNode):
             node_id=self._id,
             provider=Provider.AIME,
             model="stable_diffusion_3",
+            run_prediction_function=run_aime,
             params={
                 "data": payload,
                 "progress_callback": progress_callback,
@@ -217,6 +220,7 @@ class Flux(BaseNode):
             node_id=self._id,
             provider=Provider.AIME,
             model="flux-dev",
+            run_prediction_function=run_aime,
             params={
                 "data": payload,
                 "progress_callback": progress_callback,

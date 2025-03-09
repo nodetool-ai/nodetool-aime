@@ -1,0 +1,38 @@
+title: nodetool-base Documentation
+description: Documentation for nodetool-base nodes
+remote_theme: just-the-docs/just-the-docs
+
+plugins:
+  - jekyll-remote-theme
+
+# Navigation Structure
+nav_sort: case_sensitive
+heading_anchors: true
+
+# Enable search
+search_enabled: true
+search:
+  heading_level: 3
+  previews: 3
+  preview_words_before: 5
+  preview_words_after: 10
+  tokenizer_separator: /[\s/]+/
+  rel_url: true
+  button: false
+
+# Aux links for the upper right navigation
+aux_links:
+  "View on GitHub":
+    - "https://github.com/nodetool-ai/nodetool-base"
+
+aux_links_new_tab: true
+
+# Color scheme
+color_scheme: dark
+
+# Exclude files from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor

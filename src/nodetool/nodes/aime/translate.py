@@ -4,6 +4,8 @@ from pydantic import Field
 from nodetool.metadata.types import Provider, AudioRef
 from nodetool.workflows.processing_context import ProcessingContext
 from nodetool.workflows.types import NodeProgress
+
+from nodetool.nodes.aime.prediction import run_aime
 from .types import Progress
 
 
@@ -85,6 +87,7 @@ class SeamlessCommunication(BaseNode):
             node_id=self._id,
             provider=Provider.AIME,
             model="sc_m4tv2",
+            run_prediction_function=run_aime,
             params={
                 "data": payload,
                 "progress_callback": progress_callback,

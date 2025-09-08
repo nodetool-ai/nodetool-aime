@@ -1,12 +1,12 @@
 from typing import Any, AsyncGenerator, Optional, Callable
 
 import httpx
-from nodetool.common.environment import Environment
 from nodetool.types.prediction import Prediction, PredictionResult
 import asyncio
 from .types import JobEvent, JobStatus
+from nodetool.config.logging_config import get_logger
 
-log = Environment.get_logger()
+log = get_logger(__name__)
 
 
 async def fetch_auth_key(model: str, user: str, key: str) -> str:

@@ -30,6 +30,14 @@ aux_links_new_tab: true
 # Color scheme
 color_scheme: dark
 
+# Serve pages at the same path with `.md` suffix to mirror source filenames
+defaults:
+  - scope:
+      path: ""
+      type: pages
+    values:
+      permalink: "/:path.md"
+
 # Exclude files from processing
 exclude:
   - Gemfile
